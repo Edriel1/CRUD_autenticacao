@@ -1,4 +1,5 @@
 import Aluno from '../models/Aluno';
+import Foto from '../models/Foto.js';
 
 class AlunoController {
   async create(req, res) {
@@ -12,18 +13,31 @@ class AlunoController {
 
   async findByID(req, res) {
     try{
-      const aluno = await Aluno.findByPk(req.params.id);
+      const aluno = await Aluno.findByPk(req.params.id, {
+        attributes: ['id', 'nome', 'email', 'peso', 'altura', 'idade'],
+         order: [['id', 'DESC'], [Foto, 'id', 'DESC']],
+         include: {
+          model: Foto,
+          attributes: ['url', 'filename']
+         }
+        });
 
       if(!aluno) return res.status(400).json({errors:['Aluno nao encontrado.']});
-      const {id, nome, email} = aluno;
 
-      return res.json({id, nome, email});
-    } catch(e){return}
+      return res.json(aluno);
+    } catch(e){return res.status(500).json({errors: ['Nao foi possivel encontrar a informacao.', e]});}
   };
 
   async findAll(req, res) {
     try{
-      return res.json( await Aluno.findAll({attributes: ['id', 'nome', 'email']}));
+      return res.json( await Aluno.findAll({
+        attributes: ['id', 'nome', 'email', 'peso', 'altura', 'idade'],
+         order: [['id', 'DESC'], [Foto, 'id', 'DESC']],
+         include: {
+          model: Foto,
+          attributes: ['url', 'filename'],
+         }
+        }));
     }catch(e){return res.status(500).json({errors: ['Nao foi possivel acessar as informacoes ou nao tem informacoes.']});}
   };
 
