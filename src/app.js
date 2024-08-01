@@ -1,13 +1,13 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import './src/database';
+import './database/index.js';
 import express from 'express';
 import {resolve} from 'path';
 
-import alunoRoutes from './src/routes/AlunosRoutes.js';
-import userRoutes from './src/routes/userRoutes.js';
-import tokenRoutes from './src/routes/tokenRoutes.js'
-import fotoRoutes from './src/routes/FotoRoutes.js';
+import alunoRoutes from './routes/AlunosRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import tokenRoutes from './routes/tokenRoutes.js'
+import fotoRoutes from './routes/FotoRoutes.js';
 
 class App {
   constructor() {
